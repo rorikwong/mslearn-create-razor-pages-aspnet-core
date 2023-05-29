@@ -7,7 +7,20 @@ namespace ContosoPizza.Pages
 {
     public class PizzaListModel : PageModel
     {
+        [BindProperty]
+        public Pizza NewPizza { get; set; } = default!;
         private readonly PizzaService _service;
+        public IActionResult OnPost()
+        {
+            if (!ModelState.IsValid || NewPizza == null)
+            {
+                return Page();
+            }
+
+            _service.AddPizza(NewPizza);
+
+            return RedirectToAction("Get");
+        }
         public IList<Pizza> PizzaList {get;set; } = default!;
 
         public PizzaListModel(PizzaService service)
